@@ -12,8 +12,10 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import RedditScrapper from './lib/reddit-scraper';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+// import { FetchedComments } from 'types';
 
 export default class AppUpdater {
   constructor() {
@@ -133,5 +135,18 @@ app
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
+    ipcMain.handle(
+      'get_reddit_comments',
+      async (_, subReddits: Array<string>, keywords: Array<string>) => {
+        const scraper = new RedditScrapper(subReddits, keywords);
+        const comments = await scraper.scrapeForComments();
+        return comments;
+      }
+    );
+    // ipcMain.handle('get_reddit_comments', async (comments: FetchedComments) => {
+    //   const scraper = new RedditScrapper(subReddits, keywords);
+    //   const comments = await scraper.scrapeForComments();
+    //   return comments;
+    // });
   })
   .catch(console.log);

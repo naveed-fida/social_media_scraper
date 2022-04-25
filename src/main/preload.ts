@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { FetchedComments } from 'types';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
@@ -26,4 +27,11 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
+});
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  getRedditComments: (subReddits: Array<string>, keywords: Array<string>) =>
+    ipcRenderer.invoke('get_reddit_comments', subReddits, keywords),
+  saveRedditComments: (comments: FetchedComments) =>
+    ipcRenderer.invoke('save_reddit_comments', comments),
 });

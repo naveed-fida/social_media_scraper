@@ -239,7 +239,8 @@
     "puppeteer": "^13.6.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "twitter-api-v2": "^1.12.0"
   },
   "devEngines": {
     "node": ">=14.x",

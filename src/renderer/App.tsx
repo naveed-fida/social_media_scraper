@@ -2,6 +2,7 @@ import { AppShell, Navbar, Text } from '@mantine/core';
 import NavBarContent from 'Components/NavBarContent';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import Reddit from 'Components/Reddit/Reddit';
+import Twitter from 'Components/Twitter/Twitter';
 import { SelectedSite } from '../types';
 
 const sites: Array<SelectedSite> = ['Reddit', 'Twitter', 'LinkedIn'];
@@ -33,6 +34,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DefaultText />} />
           <Route path="/reddit" element={<Reddit />} />
+          <Route path="/twitter" element={<Twitter />} />
         </Routes>
       </AppShell>
     </Router>

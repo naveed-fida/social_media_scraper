@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { FormList } from '@mantine/form/lib/form-list/form-list';
 import { useForm, formList } from '@mantine/form';
-import { Settings } from 'types';
+import { RedditSettings } from 'types';
 
 interface FormState {
   subReddits: FormList<string>;
@@ -21,8 +21,10 @@ interface FormState {
 }
 
 interface SettingsFormProps {
-  settings: Settings;
-  onSave: (val: Settings | ((prevState: Settings) => Settings)) => void;
+  settings: RedditSettings;
+  onSave: (
+    val: RedditSettings | ((prevState: RedditSettings) => RedditSettings)
+  ) => void;
 }
 
 export default function SettingsForm({ settings, onSave }: SettingsFormProps) {

@@ -1,20 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useLocalStorage } from '@mantine/hooks';
 import { Box, Button } from '@mantine/core';
-import { Settings, FetchedComments, LoadingStatus } from 'types';
+import { RedditSettings, FetchedComments, LoadingStatus } from 'types';
 import { useState } from 'react';
-import SettingsForm from './SettingsForm';
+import SettingsForm from './RedditSettingsForm';
 import Comments from './Comments';
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    electronAPI: { getRedditComments: Function; saveRedditComments: Function };
-  }
-}
-
 export default function Reddit() {
-  const [settings, saveForm] = useLocalStorage<Settings>({
+  const [settings, saveForm] = useLocalStorage<RedditSettings>({
     key: 'scraper-settings',
     defaultValue: { subReddits: [], keywords: [] },
   });

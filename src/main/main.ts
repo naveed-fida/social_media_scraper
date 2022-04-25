@@ -13,8 +13,9 @@ import { open, lstat } from 'fs/promises';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { FetchedComments } from 'types';
+import { FetchedComments, Tweet } from 'types';
 import RedditScrapper from './lib/reddit-scraper';
+import TwitterScraper from './lib/twitter-scraper';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -163,5 +164,30 @@ app
         await file.close();
       }
     );
+    ipcMain.handle(
+      'get_tweets',
+      async (_, keywords: Array<string>, tweetsPerKeyword: number) => {
+        const scraper = new TwitterScraper(keywords, tweetsPerKeyword);
+        const tweets = await scraper.getTweets();
+        return tweets;
+      }
+    );
+
+    ipcMain.handle('save_tweets', async (_, tweets: Array<Tweet>) => {
+      const dialogRes = await dialog.showOpenDialog({
+        properties: ['openFile', 'openDirectory'],
+      });
+
+      let filePath = dialogRes.filePaths[0];
+
+      const stat = await lstat(filePath);
+      if (stat.isDirectory()) {
+        filePath = path.join(filePath, '/reddit.json');
+      }
+
+      const file = await open(filePath, 'w');
+      await file.write(JSON.stringify(tweets));
+      await file.close();
+    });
   })
   .catch(console.log);

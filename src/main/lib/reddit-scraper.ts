@@ -128,11 +128,11 @@ export default class RedditScrapper {
     await page.goto(`${this.baseURL}/${path}`);
 
     const title = await page.$('p.title');
-    const heading: string = await page.evaluate((el) => el.innerText, title);
+    const heading: string = await page.evaluate((el) => el.textContent, title);
     const allComments = await page.$$('div.usertext-body');
 
     const innerTexts: Array<string> = await Promise.all(
-      allComments.map((div) => page.evaluate((el) => el.innerHTML, div))
+      allComments.map((div) => page.evaluate((el) => el.textContent, div))
     );
 
     await page.close();

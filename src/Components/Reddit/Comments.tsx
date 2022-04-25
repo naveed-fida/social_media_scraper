@@ -14,13 +14,6 @@ interface CommentsProps {
   comments: FetchedComments;
 }
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    electronAPI: { saveRedditComments: Function; getRedditComments: Function };
-  }
-}
-
 const Comments = ({ status, comments }: CommentsProps) => {
   if (status === 'loading') {
     return <Loader sx={{ marginTop: '30px' }} />;
@@ -29,7 +22,10 @@ const Comments = ({ status, comments }: CommentsProps) => {
   if (status === 'fetched') {
     return (
       <ScrollArea>
-        <Button onClick={() => window.electronAPI.saveRedditComments(comments)}>
+        <Button
+          sx={{ marginTop: '20px' }}
+          onClick={() => window.electronAPI.saveRedditComments(comments)}
+        >
           Save to File
         </Button>
         {comments.map((cmnts) => (

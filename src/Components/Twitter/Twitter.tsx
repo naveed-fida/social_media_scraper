@@ -1,0 +1,41 @@
+/* eslint-disable react/prop-types */
+import { useLocalStorage } from '@mantine/hooks';
+import { Box, Button } from '@mantine/core';
+import { TwitterSettings, LoadingStatus, Tweet } from 'types';
+import { useState } from 'react';
+import SettingsForm from './TwitterSettings';
+import Tweets from './Tweets';
+
+export default function Reddit() {
+  const [settings, saveForm] = useLocalStorage<TwitterSettings>({
+    key: 'scraper-twitter-settings',
+    defaultValue: { keywords: [], tweetsPerKeyword: 10 },
+  });
+
+  const [status, setStatus] = useState<LoadingStatus>('not_fetched');
+
+  const [tweets, setTweets] = useState<Array<Tweet>>([]);
+
+  const fetchTweets = async () => {
+    setStatus('loading');
+    const fetchedTweets = await window.electronAPI.getTweets(
+      settings.keywords,
+      settings.tweetsPerKeyword
+    );
+
+    setTweets(fetchedTweets);
+    setStatus('fetched');
+  };
+
+  return (
+    <Box>
+      <SettingsForm settings={settings} onSave={saveForm} />
+      <Box sx={{ marginTop: '30px' }}>
+        <Button disabled={status === 'loading'} onClick={() => fetchTweets()}>
+          {status === 'not_fetched' ? 'Fetch Tweets' : 'Refresh'}
+        </Button>
+        <Tweets status={status} tweets={tweets} />
+      </Box>
+    </Box>
+  );
+}

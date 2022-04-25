@@ -45,7 +45,7 @@ export default function NavBarContent({ sites }: NavBarContentProps) {
               }}
               onClick={() => setSeletedSite(site)}
             >
-              <Anchor to={`${site.toLowerCase()}`} component={Link}>
+              <Anchor to={`/${site.toLowerCase()}`} component={Link}>
                 {site}
               </Anchor>
             </Center>

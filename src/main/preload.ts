@@ -32,6 +32,6 @@ contextBridge.exposeInMainWorld('electron', {
 contextBridge.exposeInMainWorld('electronAPI', {
   getRedditComments: (subReddits: Array<string>, keywords: Array<string>) =>
     ipcRenderer.invoke('get_reddit_comments', subReddits, keywords),
-  saveRedditComments: (comments: FetchedComments) =>
+  saveRedditComments: (comments: Array<FetchedComments>) =>
     ipcRenderer.invoke('save_reddit_comments', comments),
 });

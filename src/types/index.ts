@@ -5,6 +5,8 @@ export interface Settings {
   keywords: Array<string>;
 }
 
+export type LoadingStatus = 'not_fetched' | 'loading' | 'fetched';
+
 export type FetchedComments = Array<{
   comments: Array<string>;
   postTitle: string;

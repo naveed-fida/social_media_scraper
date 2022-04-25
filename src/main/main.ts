@@ -9,13 +9,14 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { open, lstat } from 'fs/promises';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { FetchedComments } from 'types';
 import RedditScrapper from './lib/reddit-scraper';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-// import { FetchedComments } from 'types';
 
 export default class AppUpdater {
   constructor() {
@@ -143,10 +144,24 @@ app
         return comments;
       }
     );
-    // ipcMain.handle('get_reddit_comments', async (comments: FetchedComments) => {
-    //   const scraper = new RedditScrapper(subReddits, keywords);
-    //   const comments = await scraper.scrapeForComments();
-    //   return comments;
-    // });
+    ipcMain.handle(
+      'save_reddit_comments',
+      async (_, comments: Array<FetchedComments>) => {
+        const dialogRes = await dialog.showOpenDialog({
+          properties: ['openFile', 'openDirectory'],
+        });
+
+        let filePath = dialogRes.filePaths[0];
+
+        const stat = await lstat(filePath);
+        if (stat.isDirectory()) {
+          filePath = path.join(filePath, '/reddit.json');
+        }
+
+        const file = await open(filePath, 'w');
+        await file.write(JSON.stringify(comments));
+        await file.close();
+      }
+    );
   })
   .catch(console.log);

@@ -6,7 +6,11 @@ import { useState } from 'react';
 import SettingsForm from './RedditSettingsForm';
 import Comments from './Comments';
 
-export default function Reddit() {
+interface RedditProps {
+  show: boolean;
+}
+
+export default function Reddit({ show }: RedditProps) {
   const [settings, saveForm] = useLocalStorage<RedditSettings>({
     key: 'scraper-settings',
     defaultValue: { subReddits: [], keywords: [] },
@@ -31,7 +35,7 @@ export default function Reddit() {
   };
 
   return (
-    <Box>
+    <Box sx={{ display: show ? 'block' : 'none' }}>
       <SettingsForm settings={settings} onSave={saveForm} />
       <Box sx={{ marginTop: '30px' }}>
         <Button

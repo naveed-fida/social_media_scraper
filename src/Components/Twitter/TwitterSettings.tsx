@@ -92,7 +92,7 @@ export default function SettingsForm({ settings, onSave }: SettingsFormProps) {
               <Group position="apart">
                 <TextInput
                   sx={{ width: '100%' }}
-                  label="Tweets Per Keyword"
+                  label="Tweets Per Keyword (multiples of 10)"
                   placeholder="Tweets to fetch per keyword"
                   {...form.getInputProps('tweetsPerKeyword')}
                 />

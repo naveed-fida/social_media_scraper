@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Navbar,
   Header,
@@ -7,26 +6,36 @@ import {
   Stack,
   Group,
   Image,
-  Anchor,
+  Text,
 } from '@mantine/core';
-import { Link } from 'react-router-dom';
 import { SelectedSite } from '../types';
 import icon from '../../assets/icon.png';
+import redditIcon from '../../assets/reddit.png';
+import twitterIcon from '../../assets/twitter.png';
 
 interface NavBarContentProps {
   sites: Array<SelectedSite>;
+  selected: SelectedSite;
+  setSelected: React.Dispatch<React.SetStateAction<SelectedSite>>;
 }
 
-export default function NavBarContent({ sites }: NavBarContentProps) {
-  const [selectedSite, setSeletedSite] = useState<SelectedSite>('none');
+const icons: Record<string, string> = {
+  reddit: redditIcon,
+  twitter: twitterIcon,
+};
 
+export default function NavBarContent({
+  sites,
+  selected,
+  setSelected,
+}: NavBarContentProps) {
   return (
     <>
       <Navbar.Section>
         <Header height="70px">
           <Center style={{ height: '100%' }}>
             <Group>
-              <Image src={icon} width="40px" />
+              <Image src={icon} width="33px" />
               <Title order={3}>Allma&apos;s Scraper</Title>
             </Group>
           </Center>
@@ -35,20 +44,23 @@ export default function NavBarContent({ sites }: NavBarContentProps) {
       <Navbar.Section>
         <Stack spacing="xs">
           {sites.map((site) => (
-            <Center
+            <Group
               key={site}
+              sx={{
+                ':hover': { background: '#e9ecef !important' },
+                cursor: 'pointer',
+              }}
               style={{
                 width: '100%',
                 height: '50px',
-                background: selectedSite === site ? '#e6e6e6' : '#fff',
+                background: selected === site ? '#e6e6e6' : '#fff',
                 cursor: 'pointer',
               }}
-              onClick={() => setSeletedSite(site)}
+              onClick={() => setSelected(site)}
             >
-              <Anchor to={`/${site.toLowerCase()}`} component={Link}>
-                {site}
-              </Anchor>
-            </Center>
+              <Image width="50px" src={icons[site.toLowerCase()]} />
+              <Text>{site}</Text>
+            </Group>
           ))}
         </Stack>
       </Navbar.Section>

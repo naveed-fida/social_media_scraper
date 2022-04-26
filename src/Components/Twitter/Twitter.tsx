@@ -6,10 +6,14 @@ import { useState } from 'react';
 import SettingsForm from './TwitterSettings';
 import Tweets from './Tweets';
 
-export default function Reddit() {
+interface TwitterProps {
+  show: boolean;
+}
+
+export default function Reddit({ show }: TwitterProps) {
   const [settings, saveForm] = useLocalStorage<TwitterSettings>({
     key: 'scraper-twitter-settings',
-    defaultValue: { keywords: [], tweetsPerKeyword: 10 },
+    defaultValue: { keywords: [], tweetsPerKeyword: 50 },
   });
 
   const [status, setStatus] = useState<LoadingStatus>('not_fetched');
@@ -32,7 +36,7 @@ export default function Reddit() {
   };
 
   return (
-    <Box>
+    <Box sx={{ display: show ? 'block' : 'none' }}>
       <SettingsForm settings={settings} onSave={saveForm} />
       <Box sx={{ marginTop: '30px' }}>
         <Button disabled={status === 'loading'} onClick={() => fetchTweets()}>

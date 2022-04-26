@@ -71,7 +71,7 @@ export default function SettingsForm({ settings, onSave }: SettingsFormProps) {
               <Group position="apart" sx={{ alignItems: 'end' }}>
                 <TextInput
                   sx={{ width: '60%' }}
-                  placeholder="Jora"
+                  placeholder="Slack"
                   label="Add a keyword"
                   {...form.getInputProps('currentKeyword')}
                 />

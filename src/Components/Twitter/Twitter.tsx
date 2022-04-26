@@ -17,6 +17,10 @@ export default function Reddit() {
   const [tweets, setTweets] = useState<Array<Tweet>>([]);
 
   const fetchTweets = async () => {
+    if (settings.keywords.length === 0 || settings.tweetsPerKeyword < 10) {
+      return;
+    }
+
     setStatus('loading');
     const fetchedTweets = await window.electronAPI.getTweets(
       settings.keywords,
@@ -32,7 +36,7 @@ export default function Reddit() {
       <SettingsForm settings={settings} onSave={saveForm} />
       <Box sx={{ marginTop: '30px' }}>
         <Button disabled={status === 'loading'} onClick={() => fetchTweets()}>
-          {status === 'not_fetched' ? 'Fetch Tweets' : 'Refresh'}
+          {status === 'fetched' ? 'Refresh' : 'Fetch Tweets'}
         </Button>
         <Tweets status={status} tweets={tweets} />
       </Box>

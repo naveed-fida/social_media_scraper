@@ -182,7 +182,7 @@ app
 
       const stat = await lstat(filePath);
       if (stat.isDirectory()) {
-        filePath = path.join(filePath, '/reddit.json');
+        filePath = path.join(filePath, '/twitter.json');
       }
 
       const file = await open(filePath, 'w');

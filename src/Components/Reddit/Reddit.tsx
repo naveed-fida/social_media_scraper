@@ -17,6 +17,10 @@ export default function Reddit() {
   const [comments, setComments] = useState<FetchedComments>([]);
 
   const fetchRedditComments = async () => {
+    if (settings.subReddits.length === 0 || settings.keywords.length === 0) {
+      return;
+    }
+
     setStatus('loading');
     const fetchedComments = await window.electronAPI.getRedditComments(
       settings.subReddits,

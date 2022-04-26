@@ -4,7 +4,9 @@ import { Tweet } from 'types';
 export default class TwitterScraper {
   private keywords: Array<string>;
 
-  private MAX_LIMIT = 10;
+  private LIMIT_PER_REQUEST = 100;
+
+  private MIN_TWEETS_PER_REQUEST = 10;
 
   private tweetsPerKeyword: number;
 
@@ -13,13 +15,18 @@ export default class TwitterScraper {
   constructor(keywords: Array<string>, tweetsPerKeyword: number) {
     this.keywords = keywords;
     this.tweetsPerKeyword = tweetsPerKeyword;
+    // console.log(this.keywords);
+    // console.log(this.tweetsPerKeyword);
     this.client = new TwitterApi(
       'AAAAAAAAAAAAAAAAAAAAAOt%2BbwEAAAAAoOBHhbnizmFj6Orq%2F4KXhskZ5nc%3DwoxZzVX9ajbhuF6HWmq8UmxHxCOyr5mSBv6JlgyU9eFpVplGx0'
     );
   }
 
   tweetsPerPage(limit: number) {
-    return limit < this.MAX_LIMIT ? limit : this.MAX_LIMIT;
+    const num = limit < this.LIMIT_PER_REQUEST ? limit : this.LIMIT_PER_REQUEST;
+    return num < this.MIN_TWEETS_PER_REQUEST
+      ? this.MIN_TWEETS_PER_REQUEST
+      : num;
   }
 
   async getTweetsWithKeyword(keyword: string) {
@@ -32,7 +39,7 @@ export default class TwitterScraper {
 
     tweets = tweets.concat(fetchedTweets.data.data);
 
-    if (this.tweetsPerKeyword <= this.MAX_LIMIT) return tweets;
+    if (this.tweetsPerKeyword <= this.LIMIT_PER_REQUEST) return tweets;
 
     let prevTweets = fetchedTweets;
     await (async function fetchTweets() {
@@ -62,7 +69,7 @@ export default class TwitterScraper {
 }
 
 // (async () => {
-//   const scraper = new TwitterScraper(["shaheen afridi", "babar azam"], 25);
+//   const scraper = new TwitterScraper(['shaheen afridi'], 15);
 //   const tweets = await scraper.getTweets();
 //   console.log(tweets);
 // })();

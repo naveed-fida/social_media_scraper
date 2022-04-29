@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { FetchedComments, Tweet } from 'types';
+import { FetchedComments, Tweet, LinkedInPost } from 'types';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
@@ -38,4 +38,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('save_tweets', tweets),
   getTweets: (keywords: Array<string>, tweetsPerKeyword: number) =>
     ipcRenderer.invoke('get_tweets', keywords, tweetsPerKeyword),
+  saveLinkedInPosts: (
+    posts: Array<{ keyword: string; posts: Array<LinkedInPost> }>
+  ) => ipcRenderer.invoke('save_linkedin_posts', posts),
+  getLinkedInPosts: (
+    keywords: Array<string>,
+    postsPerKeyword: number,
+    sessionId: string
+  ) =>
+    ipcRenderer.invoke(
+      'get_linkedin_posts',
+      keywords,
+      postsPerKeyword,
+      sessionId
+    ),
 });

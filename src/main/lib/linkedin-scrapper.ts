@@ -19,7 +19,11 @@ export default class LinkedIn {
     };
   }
 
-  async getPostsWithKeyword(browser: Browser, keyword: string) {
+  async getPostsWithKeyword(
+    browser: Browser,
+    keyword: string,
+    postsPerKeyword: number
+  ) {
     const page = await browser.newPage();
     await page.setCookie({
       name: 'li_at',
@@ -31,7 +35,7 @@ export default class LinkedIn {
       `https://www.linkedin.com/search/results/content/?keywords=${keyword}`
     );
 
-    const posts = await this.getPosts(page, 10);
+    const posts = await this.getPosts(page, postsPerKeyword);
     const postsWithDetails = await Promise.all(
       posts.map((post) => this.getPostDetails(post, page))
     );
@@ -40,13 +44,14 @@ export default class LinkedIn {
     return { keyword, posts: postsWithDetails };
   }
 
-  async search(keywords: Array<string>) {
+  async search(keywords: Array<string>, postsPerKeyword: number) {
     const browser = await puppeteer.launch({
       defaultViewport: { width: 1028, height: 1065 },
     });
-
     const allPosts = await Promise.all(
-      keywords.map((keyword) => this.getPostsWithKeyword(browser, keyword))
+      keywords.map((keyword) =>
+        this.getPostsWithKeyword(browser, keyword, postsPerKeyword)
+      )
     );
 
     await browser.close();
@@ -88,10 +93,10 @@ export default class LinkedIn {
   }
 }
 
-(async () => {
-  const linkedin = new LinkedIn(
-    'AQEDASJkY3EDwyZ1AAABgHALYh8AAAGAlBfmH00AhtDhSdLrqCEN3y3ZAXzrbLUY27fX2Y0msNPKwt3Tg_1eyFH8_3A3Ka0REqFikEhBNgC5MM3k6_8m8yE7jlEz20cWdwBjPnMqOs6Ycgr6-HRQo2It'
-  );
+// (async () => {
+//   const linkedin = new LinkedIn(
+//     'AQEDASJkY3EDwyZ1AAABgHALYh8AAAGAlBfmH00AhtDhSdLrqCEN3y3ZAXzrbLUY27fX2Y0msNPKwt3Tg_1eyFH8_3A3Ka0REqFikEhBNgC5MM3k6_8m8yE7jlEz20cWdwBjPnMqOs6Ycgr6-HRQo2It'
+//   );
 
-  await linkedin.search(['productivity']);
-})();
+//   await linkedin.search(['productivity']);
+// })();

@@ -17,4 +17,15 @@ export type FetchedComments = Array<{
   postTitle: string;
 }>;
 
+export interface LinkedInSettings {
+  keywords: Array<string>;
+  postsPerKeyword: number;
+  sessionId: string | null;
+}
+
+export type LinkedInPost = {
+  poster: string;
+  text: string;
+};
+
 export type Tweet = { id: string; text: string };

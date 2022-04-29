@@ -3,9 +3,10 @@ import { AppShell, Navbar, Text } from '@mantine/core';
 import NavBarContent from 'Components/NavBarContent';
 import Reddit from 'Components/Reddit/Reddit';
 import Twitter from 'Components/Twitter/Twitter';
+import LinkedIn from 'Components/LinkedIn/LinkedIn';
 import { SelectedSite } from '../types';
 
-const sites: Array<SelectedSite> = ['Reddit', 'Twitter'];
+const sites: Array<SelectedSite> = ['Reddit', 'Twitter', 'LinkedIn'];
 
 function DefaultText() {
   return <Text>Select a Service to Scrape</Text>;
@@ -22,6 +23,7 @@ function SelectedScraper({ selected }: ShowSelectedProps) {
     <>
       <Reddit show={selected === 'Reddit'} />
       <Twitter show={selected === 'Twitter'} />
+      <LinkedIn show={selected === 'LinkedIn'} />
     </>
   );
 }

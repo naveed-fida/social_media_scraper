@@ -12,6 +12,7 @@ import { SelectedSite } from '../types';
 import icon from '../../assets/icon.png';
 import redditIcon from '../../assets/reddit.png';
 import twitterIcon from '../../assets/twitter.png';
+import linkedInIcon from '../../assets/linkedin.png';
 
 interface NavBarContentProps {
   sites: Array<SelectedSite>;
@@ -22,6 +23,7 @@ interface NavBarContentProps {
 const icons: Record<string, string> = {
   reddit: redditIcon,
   twitter: twitterIcon,
+  linkedin: linkedInIcon,
 };
 
 export default function NavBarContent({

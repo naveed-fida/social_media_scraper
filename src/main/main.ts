@@ -13,9 +13,10 @@ import { open, lstat } from 'fs/promises';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { FetchedComments, Tweet } from 'types';
+import { FetchedComments, LinkedInPost, Tweet } from 'types';
 import RedditScrapper from './lib/reddit-scraper';
 import TwitterScraper from './lib/twitter-scraper';
+import LinkedInScrapper from './lib/linkedin-scrapper';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -164,6 +165,7 @@ app
         await file.close();
       }
     );
+
     ipcMain.handle(
       'get_tweets',
       async (_, keywords: Array<string>, tweetsPerKeyword: number) => {
@@ -189,5 +191,43 @@ app
       await file.write(JSON.stringify(tweets));
       await file.close();
     });
+
+    ipcMain.handle(
+      'get_linkedin_posts',
+      async (
+        _,
+        keywords: Array<string>,
+        postsPerKeyword: number,
+        sessionId: string
+      ) => {
+        console.log('session_id', sessionId);
+        const scraper = new LinkedInScrapper(sessionId);
+        const posts = await scraper.search(keywords, postsPerKeyword);
+        return posts;
+      }
+    );
+
+    ipcMain.handle(
+      'save_linkedin_posts',
+      async (
+        _,
+        posts: Array<{ keyword: string; posts: Array<LinkedInPost> }>
+      ) => {
+        const dialogRes = await dialog.showOpenDialog({
+          properties: ['openFile', 'openDirectory'],
+        });
+
+        let filePath = dialogRes.filePaths[0];
+
+        const stat = await lstat(filePath);
+        if (stat.isDirectory()) {
+          filePath = path.join(filePath, '/linkedin.json');
+        }
+
+        const file = await open(filePath, 'w');
+        await file.write(JSON.stringify(posts));
+        await file.close();
+      }
+    );
   })
   .catch(console.log);

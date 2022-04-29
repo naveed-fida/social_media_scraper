@@ -17,6 +17,8 @@ declare global {
       getRedditComments: Function;
       getTweets: Function;
       saveTweets: Function;
+      getLinkedInPosts: Function;
+      saveLinkedInPosts: Function;
     };
   }
 }

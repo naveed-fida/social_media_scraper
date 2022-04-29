@@ -10,7 +10,7 @@ interface TwitterProps {
   show: boolean;
 }
 
-export default function Reddit({ show }: TwitterProps) {
+export default function Twitter({ show }: TwitterProps) {
   const [settings, saveForm] = useLocalStorage<TwitterSettings>({
     key: 'scraper-twitter-settings',
     defaultValue: { keywords: [], tweetsPerKeyword: 50 },

@@ -8,6 +8,9 @@ export default class TwitterScraper {
 
   private MIN_TWEETS_PER_REQUEST = 10;
 
+  private TWITTER_AUTH_KEY =
+    'AAAAAAAAAAAAAAAAAAAAAOt%2BbwEAAAAAoOBHhbnizmFj6Orq%2F4KXhskZ5nc%3DwoxZzVX9ajbhuF6HWmq8UmxHxCOyr5mSBv6JlgyU9eFpVplGx0';
+
   private tweetsPerKeyword: number;
 
   private client: TwitterApi;
@@ -17,9 +20,7 @@ export default class TwitterScraper {
     this.tweetsPerKeyword = tweetsPerKeyword;
     // console.log(this.keywords);
     // console.log(this.tweetsPerKeyword);
-    this.client = new TwitterApi(
-      'AAAAAAAAAAAAAAAAAAAAAOt%2BbwEAAAAAoOBHhbnizmFj6Orq%2F4KXhskZ5nc%3DwoxZzVX9ajbhuF6HWmq8UmxHxCOyr5mSBv6JlgyU9eFpVplGx0'
-    );
+    this.client = new TwitterApi(this.TWITTER_AUTH_KEY);
   }
 
   tweetsPerPage(limit: number) {
